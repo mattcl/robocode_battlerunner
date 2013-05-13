@@ -10,14 +10,13 @@ public class MatchResults {
 
     public MatchResults(Match match) {
         this.match = match;
+        results = new ArrayList<Result>();
     }
     
-    public void addResult(BattleResults result) {
-        // find the id for the bot for this match
-        System.out.println(result.getTeamLeaderName());
+    public void addResult(int rank, BattleResults result) {
         for (Entry entry : match.entries) {
             if (entry.properName.equalsIgnoreCase(result.getTeamLeaderName())) {
-                results.add(new Result(entry.id, result));
+                results.add(new Result(entry.id, rank, result));
                 break;
             }
         }
@@ -26,7 +25,7 @@ public class MatchResults {
     public JSONObject toJSON() throws JSONException {
         JSONObject obj = new JSONObject();
         for (Result result : results) {
-            obj.append("entries_attributes", result);
+            obj.append("entries_attributes", result.toJSON());
         }
         return obj;
     }
@@ -45,7 +44,7 @@ public class MatchResults {
         public int thirds;
         public int rank;
         
-        public Result(int id, BattleResults result) {
+        public Result(int id, int rank, BattleResults result) {
             this.id = id;
             this.totalScore = result.getScore();
             this.bulletDamage = result.getBulletDamage();
@@ -57,7 +56,24 @@ public class MatchResults {
             this.firsts = result.getFirsts();
             this.seconds = result.getSeconds();
             this.thirds = result.getThirds();
-            this.rank = result.getRank();
+            this.rank = rank;
+        }
+        
+        public JSONObject toJSON() throws JSONException {
+            JSONObject obj = new JSONObject();
+            obj.put("id", id);
+            obj.put("total_score", totalScore);
+            obj.put("bullet_damage", bulletDamage);
+            obj.put("bullet_bonus", bulletBonus);
+            obj.put("ram_damage", ramDamage);
+            obj.put("ram_bonus", ramBonus);
+            obj.put("survival", survival);
+            obj.put("survival_bonus", survivalBonus);
+            obj.put("firsts", firsts);
+            obj.put("seconds", seconds);
+            obj.put("thirds", thirds);
+            obj.put("rank", rank);
+            return obj;
         }
     }
 }

@@ -30,9 +30,9 @@ public class MatchTest {
 
     @Test
     public void testGetBotString() {
-        match.addEntry(new Entry(1, "foo"));
+        match.addEntry(new Entry(1, "foo_bar.foo_1.0"));
         match.addEntry(new Entry(2, "bar"));
         match.addEntry(new Entry(3, "baz"));
-        assertEquals("foo,bar,baz", match.getBotString());
+        assertEquals("foo_bar.foo 1.0,bar,baz", match.getBotString());
     }
 }
